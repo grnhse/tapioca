@@ -13,6 +13,7 @@ rescue LoadError
 end
 
 require "zlib"
+require "open3"
 
 require_relative "lockfile_diff_parser"
 
@@ -135,9 +136,11 @@ module RubyLsp
         false
       end
 
-      sig { returns(T::Boolean) }
+      sig { returns(T.nilable(T::Boolean)) }
       def git_repo?
-        Dir.exist?(".git")
+        _, status = Open3.capture2e("git rev-parse --is-inside-work-tree")
+
+        status.success?
       end
 
       sig { returns(T::Boolean) }
