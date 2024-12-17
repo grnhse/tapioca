@@ -5,13 +5,13 @@
 ENV["RAILS_ENV"] = "test"
 
 require "minitest/spec"
-require "ruby_lsp/internal"
-require "ruby_lsp/test_helper"
+require "minitest/autorun"
+require "sorbet-runtime"
+require "language_server-protocol"
+require "ruby_lsp/utils"
 
 module ActiveSupport
   class TestCase
-    include RubyLsp::TestHelper
-
     def pop_result(server)
       result = server.pop_response
       result = server.pop_response until result.is_a?(RubyLsp::Result) || result.is_a?(RubyLsp::Error)
