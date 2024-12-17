@@ -3,9 +3,6 @@
 
 require "spec_helper"
 
-# Configure Rails Environment
-ENV["RAILS_ENV"] = "test"
-
 require "language_server-protocol"
 require "ruby_lsp/utils"
 
