@@ -8,7 +8,7 @@ require "minitest/hooks"
 
 module RubyLsp
   module Tapioca
-    class RunnerClientTest < Minitest::HooksSpec
+    class AddonSpec < Minitest::HooksSpec
       # The approach here is based on tests within the Ruby LSP Rails gem
 
       before do
