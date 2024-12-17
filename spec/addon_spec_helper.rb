@@ -1,12 +1,11 @@
 # typed: true
 # frozen_string_literal: true
 
+require "spec_helper"
+
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "test"
 
-require "minitest/spec"
-require "minitest/autorun"
-require "sorbet-runtime"
 require "language_server-protocol"
 require "ruby_lsp/utils"
 
