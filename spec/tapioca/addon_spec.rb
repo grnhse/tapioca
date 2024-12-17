@@ -10,13 +10,19 @@ module RubyLsp
     class AddonSpec < Minitest::HooksSpec
       # The approach here is based on tests within the Ruby LSP Rails gem
 
-      before(:all) do
+      # TODO: Replace by `before(:all)` once Sorbet understands it
+      def initialize(*args)
+        super(*T.unsafe(args))
+        # @project = T.let(mock_project, MockProject)
         FileUtils.cp("spec/dummy/bin/rails", "bin/rails")
         @outgoing_queue = Thread::Queue.new
         @client = T.let(RubyLsp::Rails::RunnerClient.new(@outgoing_queue), RubyLsp::Rails::RunnerClient)
       end
 
       after(:all) do
+        # TODO: Remove `bind` once Sorbet understands `after(:all)`
+        T.bind(self, AddonSpec)
+
         @client.shutdown
 
         # On Windows, the server process sometimes takes a lot longer to shutdown and may end up getting force killed,
