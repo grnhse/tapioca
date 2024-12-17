@@ -3,7 +3,6 @@
 
 require "addon_spec_helper"
 require "ruby_lsp/ruby_lsp_rails/runner_client"
-require "spoom/context"
 require "minitest/hooks"
 
 module RubyLsp
