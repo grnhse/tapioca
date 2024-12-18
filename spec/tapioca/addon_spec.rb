@@ -13,7 +13,6 @@ module RubyLsp
       # TODO: Replace by `before(:all)` once Sorbet understands it
       def initialize(*args)
         super(*T.unsafe(args))
-        # @project = T.let(mock_project, MockProject)
         FileUtils.cp("spec/dummy/bin/rails", "bin/rails")
         @outgoing_queue = Thread::Queue.new
         @client = T.let(RubyLsp::Rails::RunnerClient.new(@outgoing_queue), RubyLsp::Rails::RunnerClient)
