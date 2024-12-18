@@ -15,8 +15,9 @@ module RubyLsp
         super(*T.unsafe(args))
         FileUtils.cp("spec/dummy/bin/rails", "bin/rails")
         @outgoing_queue = Thread::Queue.new
+        @client = T.let(nil, T.nilable(RubyLsp::Rails::RunnerClient))
         FileUtils.chdir("spec/dummy") do
-          @client = T.let(RubyLsp::Rails::RunnerClient.new(@outgoing_queue), RubyLsp::Rails::RunnerClient)
+          @client = RubyLsp::Rails::RunnerClient.new(@outgoing_queue)
         end
       end
 
@@ -24,7 +25,7 @@ module RubyLsp
         # TODO: Remove `bind` once Sorbet understands `after(:all)`
         T.bind(self, AddonSpec)
 
-        @client.shutdown
+        T.must(@client).shutdown
 
         assert_predicate(@client, :stopped?)
         @outgoing_queue.close
@@ -34,8 +35,8 @@ module RubyLsp
       EXPECTED_RBI_PATH = "spec/dummy/sorbet/rbi/dsl/notify_user_job.rbi"
       it "generates DSL RBIs for a given constant" do
         addon_path = File.expand_path("lib/ruby_lsp/tapioca/server_addon.rb")
-        @client.register_server_addon(File.expand_path(addon_path))
-        @client.delegate_notification(
+        T.must(@client).register_server_addon(File.expand_path(addon_path))
+        T.must(@client).delegate_notification(
           server_addon_name: "Tapioca",
           request_name: "dsl",
           constants: ["NotifyUserJob"],
