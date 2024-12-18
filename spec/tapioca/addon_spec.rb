@@ -15,7 +15,9 @@ module RubyLsp
         super(*T.unsafe(args))
         FileUtils.cp("spec/dummy/bin/rails", "bin/rails")
         @outgoing_queue = Thread::Queue.new
-        @client = T.let(RubyLsp::Rails::RunnerClient.new(@outgoing_queue), RubyLsp::Rails::RunnerClient)
+        FileUtils.chdir("spec/dummy") do
+          @client = T.let(RubyLsp::Rails::RunnerClient.new(@outgoing_queue), RubyLsp::Rails::RunnerClient)
+        end
       end
 
       after(:all) do
@@ -29,7 +31,7 @@ module RubyLsp
         FileUtils.rm("bin/rails")
       end
 
-      EXPECTED_RBI_PATH = "sorbet/rbi/dsl/notify_user_job.rbi"
+      EXPECTED_RBI_PATH = "spec/dummy/sorbet/rbi/dsl/notify_user_job.rbi"
       it "generates DSL RBIs for a gem" do
         addon_path = File.expand_path("lib/ruby_lsp/tapioca/server_addon.rb")
         @client.register_server_addon(File.expand_path(addon_path))
@@ -49,7 +51,7 @@ module RubyLsp
           flunk("RBI file was not generated")
         end
       ensure
-        FileUtils.rm_f(EXPECTED_RBI_PATH)
+        FileUtils.rm_rf("spec/dummy/sorbet/rbi")
       end
     end
   end
