@@ -32,7 +32,7 @@ module RubyLsp
       end
 
       EXPECTED_RBI_PATH = "spec/dummy/sorbet/rbi/dsl/notify_user_job.rbi"
-      it "generates DSL RBIs for a gem" do
+      it "generates DSL RBIs for a given constant" do
         addon_path = File.expand_path("lib/ruby_lsp/tapioca/server_addon.rb")
         @client.register_server_addon(File.expand_path(addon_path))
         @client.delegate_notification(
